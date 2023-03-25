@@ -9,11 +9,11 @@ export class GlobalResponseInterceptor implements NestInterceptor {
       map(data => {
         const response = context.switchToHttp().getResponse()
         if (data && data.statusCode) {
-          response.status(data.statusCode)
+          response.status(200)
         }
         return {
           statusCode: response.statusCode,
-          result: data,
+          result: data
         }
       })
     )
