@@ -1,22 +1,24 @@
-
-import { Request } from 'express'
-import { Controller, Get, Req } from '@nestjs/common'
-import { VideoPage, VideoPageDTO } from './video.types'
+import { Controller } from '@nestjs/common'
 import { VideoService } from './video.service'
-import { plainToInstance } from 'class-transformer'
+import { Crud, CrudController } from '@nestjsx/crud'
+import { Video } from 'src/entities/video'
 
-@Controller('video')
-export class VideoController {
-
-  constructor(private readonly videoServ: VideoService) {}
-
-  @Get('/page')
-  async findAll(@Req() request: Request): Promise<VideoPage> {
-    return this.videoServ.findAll(
-      plainToInstance(
-        VideoPageDTO, 
-        request.query
-      )
-    )
+@Crud({
+  model: {
+    type: Video
+  },
+  params: {
+    id: {
+      field: 'id',
+      type: 'uuid',
+      primary: true
+    }
+  },
+  query: {
+    limit: 10
   }
+})
+@Controller('video')
+export class VideoController implements CrudController<Video> {
+  constructor(public service: VideoService) {}
 }
