@@ -22,9 +22,9 @@ export class Video {
   tag!: string;
 
   @Column({ nullable: false })
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
-  thumb!: number;
+  thumb!: string;
 
   @Column({ nullable: false })
   @IsString()
