@@ -28,9 +28,9 @@ export class VideoController implements CrudController<Video> {
     return this.service.queryTags()
   }
 
-  @Get('queryRandomVideos')
-  async queryRandomVideos(@Query('limit') limit: number): Promise<Video[]> {
-    return this.service.queryRandomVideos(limit)
+  @Get('queryRandoms')
+  async queryRandoms(@Query('limit') limit: number): Promise<Video[]> {
+    return this.service.queryRandoms(limit)
   }
 
   @Get('queryPage')

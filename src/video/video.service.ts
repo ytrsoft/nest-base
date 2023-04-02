@@ -45,7 +45,7 @@ export class VideoService extends TypeOrmCrudService<Video>  {
     .getRawMany()
   }
 
-  async queryRandomVideos(limit: number = 4): Promise<Video[]> {
+  async queryRandoms(limit: number = 4): Promise<Video[]> {
     const randomVideos = await this.videoRepository
       .createQueryBuilder()
       .orderBy('RANDOM()')
