@@ -13,29 +13,28 @@ export class VideoService extends TypeOrmCrudService<Video>  {
   }
 
   async queryPage(page: number = 1, limit: number = 12, tag: string = '', title: string = ''): Promise<GetManyDefaultResponse<Video>> {
-    const [data, total] = await Promise.all([
-      this.videoRepository.createQueryBuilder('video')
-        .where(tag ? 'video.tag = :tag' : '', { tag })
-        .andWhere(title ? 'video.title LIKE :title' : '', { title: `%${title}%` })
-        .take(limit)
-        .skip((page - 1) * limit)
-        .getMany(),
-      this.videoRepository.createQueryBuilder('video')
-        .where(tag ? 'video.tag = :tag' : '', { tag })
-        .andWhere(title ? 'video.title LIKE :title' : '', { title: `%${title}%` })
-        .getCount(),
-    ]);
+    tag = tag === '全部' ? '' : tag
+    const videoQb = this.videoRepository.createQueryBuilder('video')
+    if (title) {
+      videoQb.where('video.title LIKE :title', { title: `%${title}%` })
+    }
+    if (tag) {
+      videoQb.andWhere('video.tag = :tag', { tag })
+    }
+    const [data, total] = await videoQb
+      .take(limit)
+      .skip((page - 1) * limit)
+      .getManyAndCount()
     const pageCount = Math.ceil(total / limit)
-
     return {
       data,
       count: data.length,
       total,
       page,
-      pageCount,
+      pageCount
     }
   }
-  
+
   async queryTags(): Promise<Tag[]> {
     return this.videoRepository.createQueryBuilder()
     .select('tag', 'label')
@@ -55,3 +54,7 @@ export class VideoService extends TypeOrmCrudService<Video>  {
   }
 
 }
+function Like(arg0: string) {
+  throw new Error('Function not implemented.')
+}
+
