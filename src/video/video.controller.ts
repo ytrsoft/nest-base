@@ -1,6 +1,6 @@
-import { Controller } from '@nestjs/common'
+import { Controller, Get, Query } from '@nestjs/common'
 import { VideoService } from './video.service'
-import { Crud, CrudController } from '@nestjsx/crud'
+import { Crud, CrudController, GetManyDefaultResponse } from '@nestjsx/crud'
 import { Video } from 'src/entities/video'
 
 @Crud({
@@ -20,5 +20,22 @@ import { Video } from 'src/entities/video'
 })
 @Controller('video')
 export class VideoController implements CrudController<Video> {
+
   constructor(public service: VideoService) {}
+
+  @Get('queryTags')
+  async queryTags(): Promise<Tag[]> {
+    return this.service.queryTags()
+  }
+
+  @Get('queryRandomVideos')
+  async queryRandomVideos(@Query('limit') limit: number): Promise<Video[]> {
+    return this.service.queryRandomVideos(limit)
+  }
+
+  @Get('queryPage')
+  async queryPage(@Query('page') page: number, @Query('limit') limit: number, @Query('tag') tag: string, @Query('title') title: string): Promise<GetManyDefaultResponse<Video>> {
+    return this.service.queryPage(page, limit, tag, title);
+  }
+
 }
