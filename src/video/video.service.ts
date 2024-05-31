@@ -54,7 +54,4 @@ export class VideoService extends TypeOrmCrudService<Video>  {
   }
 
 }
-function Like(arg0: string) {
-  throw new Error('Function not implemented.')
-}
 
